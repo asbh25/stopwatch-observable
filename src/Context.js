@@ -4,7 +4,7 @@ import { interval } from "rxjs";
 export const Context = React.createContext();
 
 export function ContextProvider({ children }) {
-  const [time, setTime] = useState({ s: 50, m: 59, h: 1 });
+  const [time, setTime] = useState({ s: 0, m: 0, h: 0 });
   const [sub, setSub] = useState();
   const [status, setStatus] = useState(0);
 
