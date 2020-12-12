@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Context } from "../Context";
 
-function Button(props) {
+function Button() {
+  const context = useContext(Context);
+
   return (
     <div>
-      {props.status === 0 ? (
+      {context.status === 0 ? (
         <button
           className="stopwatch-btn stopwatch-btn-gre"
-          onClick={props.start}
+          onClick={context.start}
         >
           Start
         </button>
@@ -14,17 +17,23 @@ function Button(props) {
         ""
       )}
 
-      {props.status === 1 ? (
+      {context.status === 1 ? (
         <div>
           <button
             className="stopwatch-btn stopwatch-btn-red"
-            onClick={props.pause}
+            onClick={context.pause}
           >
             Stop
           </button>
           <button
             className="stopwatch-btn stopwatch-btn-yel"
-            onClick={props.reset}
+            onDoubleClick={context.pause}
+          >
+            Wait
+          </button>
+          <button
+            className="stopwatch-btn stopwatch-btn-red"
+            onClick={context.reset}
           >
             Reset
           </button>
@@ -33,17 +42,17 @@ function Button(props) {
         ""
       )}
 
-      {props.status === 2 ? (
+      {context.status === 2 ? (
         <div>
           <button
             className="stopwatch-btn stopwatch-btn-gre"
-            onClick={props.resume}
+            onClick={context.resume}
           >
             Resume
           </button>
           <button
             className="stopwatch-btn stopwatch-btn-yel"
-            onClick={props.reset}
+            onClick={context.reset}
           >
             Reset
           </button>
