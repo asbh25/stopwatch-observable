@@ -18,7 +18,7 @@ function Button(props) {
         <div>
           <button
             className="stopwatch-btn stopwatch-btn-red"
-            onClick={props.stop}
+            onClick={props.pause}
           >
             Stop
           </button>

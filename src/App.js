@@ -1,46 +1,51 @@
 import React, { useState } from "react";
 import Button from "./Components/Button";
 import Stopwatch from "./Components/Stopwatch";
+
+import { interval } from "rxjs";
+
 import "./App.css";
 
 function App() {
   const [time, setTime] = useState({ s: 0, m: 0, h: 0 });
-  const [intervalId, setIntervalId] = useState();
+  const [sub, setSub] = useState();
   const [status, setStatus] = useState(0);
 
+  const source = interval(1000);
+
   const start = () => {
-    run();
     setStatus(1);
-    setIntervalId(setInterval(run, 1000));
+
+    let updatedS = time.s,
+      updatedM = time.m,
+      updatedH = time.h;
+
+    setSub(
+      source.subscribe(() => {
+        updatedS++;
+
+        if (updatedS === 60) {
+          updatedS = 0;
+          updatedM++;
+        }
+
+        if (updatedM === 60) {
+          updatedH++;
+          updatedM = 0;
+        }
+
+        setTime({ s: updatedS, m: updatedM, h: updatedH });
+      })
+    );
   };
 
-  let updatedS = time.s,
-    updatedM = time.m,
-    updatedH = time.h;
-
-  const run = () => {
-    updatedS++;
-
-    if (updatedS === 60) {
-      updatedS = 0;
-      updatedM++;
-    }
-
-    if (updatedM === 60) {
-      updatedH++;
-      updatedM = 0;
-    }
-
-    return setTime({ s: updatedS, m: updatedM, h: updatedH });
-  };
-
-  const stop = () => {
-    clearInterval(intervalId);
+  const pause = () => {
+    sub.unsubscribe();
     setStatus(2);
   };
 
   const reset = () => {
-    clearInterval(intervalId);
+    sub.unsubscribe();
     setStatus(0);
     setTime({ s: 0, m: 0, h: 0 });
   };
@@ -54,10 +59,10 @@ function App() {
           <Stopwatch time={time} />
           <Button
             status={status}
+            start={start}
+            pause={pause}
             resume={resume}
             reset={reset}
-            stop={stop}
-            start={start}
           />
         </div>
       </div>
